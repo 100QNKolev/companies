@@ -12,20 +12,20 @@ public class Company {
     private Long id;
 
     @Column(nullable = false)
-    public String name;
+    private String name;
 
     @Column(nullable = false, length = 2)
-    public String country;
+    private String country;
 
     @Column(nullable = false, unique = true)
-    public String symbol;
+    private String symbol;
 
     @Column(nullable = false, name = "created_at")
-    public Instant createdAt;
+    private Instant createdAt;
 
-    public String website;
+    private String website;
 
-    public String email;
+    private String email;
 
     public Company() {}
 

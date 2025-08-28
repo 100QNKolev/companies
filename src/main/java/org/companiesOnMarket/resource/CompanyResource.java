@@ -1,10 +1,7 @@
 package org.companiesOnMarket.resource;
 
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.service.CompanyService;
@@ -25,4 +22,8 @@ public class CompanyResource {
     @POST
     @Path("/")
     public void createCompany(Company newCompany) { companyService.createCompany(newCompany); }
+
+    @PATCH
+    @Path("/{id}")
+    public Company updateCompany(@PathParam("id") long id, Company company) { return companyService.updateCompany(id, company); }
 }

@@ -5,7 +5,7 @@ import org.companiesOnMarket.error.ValidationException;
 
 public class CompanyValidator {
 
-    private static final String emailValidationRegex = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\\\.[A-Za-z0-9-]+)*(\\\\.[A-Za-z]{2,})$";
+    private static final String emailValidationRegex = "^((?!\\.)[\\w\\-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$";
 
     public static void validateForCreate(Company company) {
         String companyName = company.getName();

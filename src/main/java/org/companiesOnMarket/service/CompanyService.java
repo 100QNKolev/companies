@@ -7,8 +7,6 @@ import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.error.NotFoundException;
 import org.companiesOnMarket.repository.CompanyRepository;
 import org.companiesOnMarket.util.CompanyValidator;
-
-import java.time.Instant;
 import java.util.List;
 
 @ApplicationScoped
@@ -19,16 +17,15 @@ public class CompanyService {
 
     public List<Company> getAllCompanies() { return repo.getAll(); }
 
+    @Transactional
     public void createCompany(Company company)
     {
         // TODO: Add authorization
-        company.setCreatedAt(Instant.now());
-
         CompanyValidator.validateForCreate(company);
 
         repo.create(company);
     }
-    
+
     public Company updateCompany(long id, Company companyToUpdate)
     {
         Company existingCompany = repo.findById(id);

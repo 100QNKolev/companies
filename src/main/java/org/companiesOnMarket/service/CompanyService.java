@@ -19,18 +19,16 @@ public class CompanyService {
 
     public List<Company> getAllCompanies() { return repo.getAll(); }
 
-    @Transactional
     public void createCompany(Company company)
     {
         // TODO: Add authorization
         company.setCreatedAt(Instant.now());
 
-        CompanyValidator.validateInput(company);
+        CompanyValidator.validateForCreate(company);
 
         repo.create(company);
     }
-
-    @Transactional
+    
     public Company updateCompany(long id, Company companyToUpdate)
     {
         Company existingCompany = repo.findById(id);
@@ -40,7 +38,7 @@ public class CompanyService {
             throw new NotFoundException("Company not found");
         }
 
-        //CompanyValidator.validateInput(companyToUpdate);
+        CompanyValidator.validateForUpdate(companyToUpdate);
 
         if (companyToUpdate.getName() != null && !companyToUpdate.getName().isBlank()) {
             existingCompany.setName(companyToUpdate.getName());

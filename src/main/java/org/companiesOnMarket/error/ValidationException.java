@@ -1,8 +1,11 @@
 package org.companiesOnMarket.error;
 
-public class ValidationException extends RuntimeException {
+import jakarta.ws.rs.core.Response;
+
+public class ValidationException extends ApiException {
+
     public ValidationException(String message) {
-        super(message);
+        super(message, Response.Status.BAD_REQUEST.getStatusCode());
     }
 }
 

@@ -1,6 +1,8 @@
 package org.companiesOnMarket.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import java.time.Instant;
 
 @Entity
@@ -20,6 +22,7 @@ public class Company {
     @Column(nullable = false, unique = true)
     private String symbol;
 
+    @CreationTimestamp
     @Column(nullable = false, name = "created_at")
     private Instant createdAt;
 

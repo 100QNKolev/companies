@@ -19,7 +19,7 @@ public class CompanyService {
     public void createCompany(Company company)
     {
         // TODO: Add authorization
-        company.createdAt = Instant.now();
+        company.setCreatedAt(Instant.now());
         repo.create(company);
     }
 }

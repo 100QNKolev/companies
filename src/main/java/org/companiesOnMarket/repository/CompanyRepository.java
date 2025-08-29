@@ -23,4 +23,5 @@ public class CompanyRepository {
 
     public Company findById(long id) { return em.find(Company.class, id); }
 
+    public void synchronize() { em.flush(); }
 }

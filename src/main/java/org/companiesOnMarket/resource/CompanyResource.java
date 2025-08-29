@@ -1,8 +1,11 @@
 package org.companiesOnMarket.resource;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.companiesOnMarket.dto.CompanyCreateDto;
+import org.companiesOnMarket.dto.CompanyUpdateDto;
 import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.service.CompanyService;
 
@@ -21,9 +24,10 @@ public class CompanyResource {
 
     @POST
     @Path("/")
-    public void createCompany(Company newCompany) { companyService.createCompany(newCompany); }
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createCompany(@Valid CompanyCreateDto newCompany) { companyService.createCompany(newCompany); }
 
     @PATCH
     @Path("/{id}")
-    public Company updateCompany(@PathParam("id") long id, Company company) { return companyService.updateCompany(id, company); }
+    public Company updateCompany(@PathParam("id") long id, @Valid CompanyUpdateDto company) { return companyService.updateCompany(id, company); }
 }

@@ -3,12 +3,15 @@ package org.companiesOnMarket.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import org.companiesOnMarket.dto.CompanyCreateDto;
+import org.companiesOnMarket.dto.CompanyUpdateDto;
 import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.error.NotFoundException;
+import org.companiesOnMarket.error.PersistenceException;
+import org.companiesOnMarket.mapper.CompanyMapper;
 import org.companiesOnMarket.repository.CompanyRepository;
-import org.companiesOnMarket.util.CompanyValidator;
+import org.hibernate.exception.ConstraintViolationException;
 
-import java.time.Instant;
 import java.util.List;
 
 @ApplicationScoped
@@ -17,19 +20,26 @@ public class CompanyService {
     @Inject
     CompanyRepository repo;
 
+    @Inject
+    CompanyMapper mapper;
+
     public List<Company> getAllCompanies() { return repo.getAll(); }
 
-    public void createCompany(Company company)
+    @Transactional
+    public void createCompany(CompanyCreateDto companyDto)
     {
         // TODO: Add authorization
-        company.setCreatedAt(Instant.now());
+        Company company = mapper.fromCreateDto(companyDto);
 
-        CompanyValidator.validateForCreate(company);
-
-        repo.create(company);
+        try {
+            repo.create(company);
+        } catch (ConstraintViolationException e) {
+            throw new PersistenceException("Database validation failed");
+        }
     }
-    
-    public Company updateCompany(long id, Company companyToUpdate)
+
+    @Transactional
+    public Company updateCompany(long id, CompanyUpdateDto companyDto)
     {
         Company existingCompany = repo.findById(id);
 
@@ -38,22 +48,12 @@ public class CompanyService {
             throw new NotFoundException("Company not found");
         }
 
-        CompanyValidator.validateForUpdate(companyToUpdate);
+        mapper.updateEntityFromDto(companyDto, existingCompany);
 
-        if (companyToUpdate.getName() != null && !companyToUpdate.getName().isBlank()) {
-            existingCompany.setName(companyToUpdate.getName());
-        }
-        if (companyToUpdate.getCountry() != null && !companyToUpdate.getCountry().isBlank()) {
-            existingCompany.setCountry(companyToUpdate.getCountry());
-        }
-        if (companyToUpdate.getSymbol() != null && !companyToUpdate.getSymbol().isBlank()) {
-            existingCompany.setSymbol(companyToUpdate.getSymbol());
-        }
-        if (companyToUpdate.getEmail() != null) {
-            existingCompany.setEmail(companyToUpdate.getEmail());
-        }
-        if (companyToUpdate.getWebsite() != null) {
-            existingCompany.setWebsite(companyToUpdate.getWebsite());
+        try {
+            repo.synchronize();
+        } catch (ConstraintViolationException e) {
+            throw new PersistenceException("Database validation failed");
         }
 
         return existingCompany;

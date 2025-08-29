@@ -18,9 +18,15 @@ dependencies {
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-resteasy")
     implementation("io.quarkus:quarkus-hibernate-orm")
+    implementation("io.quarkus:quarkus-hibernate-validator")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
+
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
+
+    // MapStruct
+    implementation("org.mapstruct:mapstruct:1.6.2")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
 }
 
 group = "org.companiesOnMarket"
@@ -37,4 +43,13 @@ tasks.withType<Test> {
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
     options.compilerArgs.add("-parameters")
+}
+
+// Needed for MapStruct
+val generatedSourcesDir = layout.buildDirectory.dir("generated/sources/annotationProcessor/java/main")
+
+sourceSets["main"].java.srcDir(generatedSourcesDir)
+
+tasks.named("compileJava") {
+    dependsOn("compileQuarkusGeneratedSourcesJava")
 }

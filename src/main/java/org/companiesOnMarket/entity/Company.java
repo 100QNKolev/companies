@@ -30,14 +30,17 @@ public class Company {
 
     private String email;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stocks_id")
+    private Stock companyStock;
+
     public Company() {}
 
-    public Company(String name, String country, String symbol, Instant createdAt, String website, String email)
+    public Company(String name, String country, String symbol, String website, String email)
     {
         this.name = name;
         this.country = country;
         this.symbol = symbol;
-        this.createdAt = createdAt;
         this.website = website;
         this.email = email;
     }
@@ -55,11 +58,17 @@ public class Company {
     public void setSymbol(String symbol) {this.symbol = symbol;}
 
     public Instant getCreatedAt() {return createdAt;}
-    public void setCreatedAt(Instant createdAt) {this.createdAt = createdAt;}
 
     public String getWebsite() {return website;}
     public void setWebsite(String website) {this.website = website;}
 
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
+
+    public Stock getCompanyStock() {
+        return companyStock;
+    }
+    public void setCompanyStock(Stock companyStock) {
+        this.companyStock = companyStock;
+    }
 }

@@ -34,7 +34,8 @@ public class Company {
     @Column(name = "last_fetched")
     private Instant lastFetched;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "company_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stock> stocks = new ArrayList<>();
 
     public Company() {}
@@ -76,11 +77,9 @@ public class Company {
 
     public void addStock(Stock stock) {
         stocks.add(stock);
-        stock.setCompany(this);
     }
 
     public void removeStock(Stock stock) {
         stocks.remove(stock);
-        stock.setCompany(null);
     }
 }

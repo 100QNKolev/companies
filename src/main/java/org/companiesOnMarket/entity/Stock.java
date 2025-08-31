@@ -24,17 +24,15 @@ public class Stock {
     @Column(nullable = false, name = "last_fetched")
     private Instant lastFetched;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    @Column(name = "company_id")
+    private Long companyId;
 
     public Stock() {}
 
-    public Stock(BigDecimal marketCapitalization, BigDecimal shareOutstanding, Company company)
+    public Stock(BigDecimal marketCapitalization, BigDecimal shareOutstanding)
     {
         this.marketCapitalization = marketCapitalization;
         this.shareOutstanding = shareOutstanding;
-        this.company = company;
     }
 
     protected void setId(Long id) {
@@ -55,6 +53,6 @@ public class Stock {
     public Instant getLastFetched() { return lastFetched; }
     public void setLastFetched(Instant lastFetched) { this.lastFetched = lastFetched; }
 
-    public Company getCompany() { return company; }
-    public void setCompany(Company company) { this.company = company; }
+    protected void setCompanyId(Long companyId) { this.companyId = companyId; }
+    public Long getCompanyId() { return companyId; }
 }

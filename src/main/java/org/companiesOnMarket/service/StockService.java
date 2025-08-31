@@ -65,7 +65,7 @@ public class StockService {
         }
 
         CompanyGetStocksDto companyGetStocksDto = new CompanyGetStocksDto();
-        mapper.createCompanyStockResult(company, companyGetStocksDto);
+        mapper.createGetCompanyStockResult(company, companyGetStocksDto);
         return companyGetStocksDto;
     }
 

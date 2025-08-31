@@ -49,6 +49,7 @@ public class StockService {
             return buildDto(company, latest);
         }
 
+        // Maybe not needed
         Stock latest = stockRepo.findLatestByCompanyId(companyId);
 
         if (latest != null && latest.getLastFetched().isAfter(isOld)) {

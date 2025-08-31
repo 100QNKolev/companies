@@ -18,11 +18,14 @@ import java.util.List;
 @ApplicationScoped
 public class CompanyService {
 
-    @Inject
-    CompanyRepository companyRepo;
+    private final CompanyRepository companyRepo;
+    private final CompanyMapper mapper;
 
     @Inject
-    CompanyMapper mapper;
+    public CompanyService(CompanyRepository companyRepo, CompanyMapper mapper) {
+        this.companyRepo = companyRepo;
+        this.mapper = mapper;
+    }
 
     public List<CompanyGetDto> getAllCompanies()
     {

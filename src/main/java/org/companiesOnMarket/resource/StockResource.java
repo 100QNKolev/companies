@@ -5,13 +5,19 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import org.companiesOnMarket.dto.CompanyGetStocksDto;
+import org.companiesOnMarket.service.CompanyService;
 import org.companiesOnMarket.service.StockService;
 
 @Path("/company-stocks")
 public class StockResource {
 
+    private final StockService stockService;
+
     @Inject
-    StockService stockService;
+    public StockResource(StockService stockService)
+    {
+        this.stockService = stockService;
+    }
 
     @GET
     @Path("/{id}")

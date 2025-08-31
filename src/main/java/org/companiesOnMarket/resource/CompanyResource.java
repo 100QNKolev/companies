@@ -13,8 +13,13 @@ import java.util.List;
 @Path("/companies")
 public class CompanyResource {
 
+    private final CompanyService companyService;
+
     @Inject
-    CompanyService companyService;
+    public CompanyResource(CompanyService companyService)
+    {
+        this.companyService = companyService;
+    }
 
     @GET
     @Path("/")

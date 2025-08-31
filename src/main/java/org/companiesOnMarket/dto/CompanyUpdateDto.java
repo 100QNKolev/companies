@@ -1,21 +1,31 @@
 package org.companiesOnMarket.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class CompanyUpdateDto
 {
-
+    @NotBlank
+    @Size(max = 255)
     private String name;
 
+    @NotBlank
     @Size(min = 2, max = 2)
     private String country;
+
     //Maybe add unique
+    @NotBlank
+    @Size(max = 10)
     private String symbol;
 
     @Email
+    @NotBlank
+    @Size(max = 255)
     private String email;
 
+    @NotBlank
+    @Size(max = 255)
     private String website;
 
     public CompanyUpdateDto() {}

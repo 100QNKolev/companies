@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.companiesOnMarket.dto.CompanyCreateDto;
+import org.companiesOnMarket.dto.CompanyGetDto;
 import org.companiesOnMarket.dto.CompanyUpdateDto;
 import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.error.NotFoundException;
@@ -18,12 +19,18 @@ import java.util.List;
 public class CompanyService {
 
     @Inject
-    CompanyRepository repo;
+    CompanyRepository companyRepo;
 
     @Inject
     CompanyMapper mapper;
 
-    public List<Company> getAllCompanies() { return repo.getAll(); }
+    public List<CompanyGetDto> getAllCompanies()
+    {
+        List<Company> companies = companyRepo.getAll();
+        return mapper.toGetCompanyDtoList(companies);
+    }
+
+    public Company getCompanyById(long id) { return companyRepo.findById(id); }
 
     @Transactional
     public void createCompany(CompanyCreateDto companyDto)
@@ -32,16 +39,16 @@ public class CompanyService {
         Company company = mapper.fromCreateDto(companyDto);
 
         try {
-            repo.create(company);
-        } catch (ConstraintViolationException e) {
-            throw new PersistenceException("Database validation failed");
+            companyRepo.create(company);
+        } catch (Exception e) {
+            throw new PersistenceException("Failed to save company " + company.getName());
         }
     }
 
     @Transactional
-    public Company updateCompany(long id, CompanyUpdateDto companyDto)
+    public CompanyGetDto updateCompany(long id, CompanyUpdateDto companyDto)
     {
-        Company existingCompany = repo.findById(id);
+        Company existingCompany = companyRepo.findById(id);
 
         if (existingCompany == null)
         {
@@ -51,11 +58,13 @@ public class CompanyService {
         mapper.updateEntityFromDto(companyDto, existingCompany);
 
         try {
-            repo.synchronize();
-        } catch (ConstraintViolationException e) {
-            throw new PersistenceException("Database validation failed");
+            companyRepo.synchronize();
+        } catch (Exception e) {
+            throw new PersistenceException("Failed to update company " + existingCompany.getName());
         }
 
-        return existingCompany;
+        CompanyGetDto result = new CompanyGetDto();
+        mapper.createGetCompanyResultDto(existingCompany, result);
+        return result;
     }
 }

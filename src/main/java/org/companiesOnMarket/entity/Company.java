@@ -2,8 +2,9 @@ package org.companiesOnMarket.entity;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
-
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "companies", schema = "public")
@@ -30,16 +31,22 @@ public class Company {
 
     private String email;
 
+    @Column(name = "last_fetched")
+    private Instant lastFetched;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Stock> stocks = new ArrayList<>();
+
     public Company() {}
 
-    public Company(String name, String country, String symbol, Instant createdAt, String website, String email)
+    public Company(String name, String country, String symbol, String website, String email, Instant lastFetched)
     {
         this.name = name;
         this.country = country;
         this.symbol = symbol;
-        this.createdAt = createdAt;
         this.website = website;
         this.email = email;
+        this.lastFetched = lastFetched;
     }
 
     public Long getId() {return id;}
@@ -55,11 +62,25 @@ public class Company {
     public void setSymbol(String symbol) {this.symbol = symbol;}
 
     public Instant getCreatedAt() {return createdAt;}
-    public void setCreatedAt(Instant createdAt) {this.createdAt = createdAt;}
 
     public String getWebsite() {return website;}
     public void setWebsite(String website) {this.website = website;}
 
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
+
+    public Instant getLastFetched() { return lastFetched; }
+    public void setLastFetched(Instant lastFetched) { this.lastFetched = lastFetched; }
+
+    public List<Stock> getStocks() { return stocks; }
+
+    public void addStock(Stock stock) {
+        stocks.add(stock);
+        stock.setCompany(this);
+    }
+
+    public void removeStock(Stock stock) {
+        stocks.remove(stock);
+        stock.setCompany(null);
+    }
 }

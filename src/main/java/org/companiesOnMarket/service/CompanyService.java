@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.companiesOnMarket.dto.CompanyCreateDto;
+import org.companiesOnMarket.dto.CompanyGetDto;
 import org.companiesOnMarket.dto.CompanyUpdateDto;
 import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.error.NotFoundException;
@@ -23,7 +24,13 @@ public class CompanyService {
     @Inject
     CompanyMapper mapper;
 
-    public List<Company> getAllCompanies() { return repo.getAll(); }
+    public List<CompanyGetDto> getAllCompanies()
+    {
+        List<Company> companies = repo.getAll();
+        return mapper.toGetCompanyDtoList(companies);
+    }
+
+    public Company getCompanyById(long id) { return repo.findById(id); }
 
     @Transactional
     public void createCompany(CompanyCreateDto companyDto)
@@ -39,7 +46,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public Company updateCompany(long id, CompanyUpdateDto companyDto)
+    public CompanyGetDto updateCompany(long id, CompanyUpdateDto companyDto)
     {
         Company existingCompany = repo.findById(id);
 
@@ -55,7 +62,8 @@ public class CompanyService {
         } catch (ConstraintViolationException e) {
             throw new PersistenceException("Database validation failed");
         }
-
-        return existingCompany;
+        CompanyGetDto result = new CompanyGetDto();
+        mapper.createGetCompanyResultDto(existingCompany, result);
+        return result;
     }
 }

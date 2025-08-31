@@ -1,6 +1,7 @@
 plugins {
     java
     id("io.quarkus")
+    id("org.sonarqube") version "6.3.1.5724"
 }
 
 repositories {
@@ -11,6 +12,7 @@ repositories {
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
+val mapstructVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
@@ -22,13 +24,10 @@ dependencies {
     implementation("io.quarkus:quarkus-hibernate-orm")
     implementation("io.quarkus:quarkus-hibernate-validator")
     implementation("io.quarkus:quarkus-jdbc-postgresql")
-
+    implementation("org.mapstruct:mapstruct:$mapstructVersion")
+    annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
-
-    // MapStruct
-    implementation("org.mapstruct:mapstruct:1.6.2")
-    annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
 }
 
 group = "org.companiesOnMarket"

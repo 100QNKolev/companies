@@ -30,6 +30,13 @@ dependencies {
     testImplementation("io.rest-assured:rest-assured")
 }
 
+sonar {
+    properties {
+        property("sonar.projectKey", "100QNKolev_companies")
+        property("sonar.organization", "100qnkolev")
+    }
+}
+
 group = "org.companiesOnMarket"
 version = "1.0-SNAPSHOT"
 

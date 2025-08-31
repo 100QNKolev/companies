@@ -32,15 +32,6 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
 }
 
-sonarqube {
-    properties {
-        property("sonar.projectKey", "100QNKolev_companies")
-        property("sonar.organization", "100qnkolev")
-        property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.java.binaries", "build/classes/java/main")
-    }
-}
-
 group = "org.companiesOnMarket"
 version = "1.0-SNAPSHOT"
 

@@ -5,8 +5,8 @@ import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.companiesOnMarket.dto.CompanyCreateDto;
+import org.companiesOnMarket.dto.CompanyGetDto;
 import org.companiesOnMarket.dto.CompanyUpdateDto;
-import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.service.CompanyService;
 
 import java.util.List;
@@ -20,14 +20,14 @@ public class CompanyResource {
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Company> getAllCompanies() { return companyService.getAllCompanies(); }
+    public List<CompanyGetDto> getAllCompanies() { return companyService.getAllCompanies(); }
 
     @POST
     @Path("/")
-    @Consumes(MediaType.APPLICATION_JSON)
     public void createCompany(@Valid CompanyCreateDto newCompany) { companyService.createCompany(newCompany); }
 
     @PATCH
     @Path("/{id}")
-    public Company updateCompany(@PathParam("id") long id, @Valid CompanyUpdateDto company) { return companyService.updateCompany(id, company); }
+    @Produces(MediaType.APPLICATION_JSON)
+    public CompanyGetDto updateCompany(@PathParam("id") long id, @Valid CompanyUpdateDto company) { return companyService.updateCompany(id, company); }
 }

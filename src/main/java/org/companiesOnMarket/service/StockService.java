@@ -10,10 +10,13 @@ import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.entity.Stock;
 import org.companiesOnMarket.error.NotFoundException;
 import org.companiesOnMarket.error.PersistenceException;
+import org.companiesOnMarket.error.StockApiFetchException;
 import org.companiesOnMarket.mapper.StockMapper;
 import org.companiesOnMarket.repository.StockRepository;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.hibernate.exception.ConstraintViolationException;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 @ApplicationScoped
 public class StockService {
@@ -26,47 +29,60 @@ public class StockService {
     CompanyService companyService;
 
     @Inject
-    StockRepository repo;
+    StockRepository stockRepo;
 
     @Inject
     StockMapper mapper;
 
     @Transactional
-    public CompanyGetStocksDto getOrCreateStockById(long id)
-    {
-        Company company = companyService.getCompanyById(id);
+    public CompanyGetStocksDto getOrUpdateStock(long companyId) {
+        Company company = companyService.getCompanyById(companyId);
 
-        if (company == null)
-        {
+        if (company == null) {
             throw new NotFoundException("Company not found");
         }
 
-        Stock stock = company.getCompanyStock();
+        Instant isOld = Instant.now().minus(24, ChronoUnit.HOURS);
 
-        if (stock == null)
-        {
-            stock = new Stock();
-            StockGetDto newStock = stockApiClient.getBySymbol(company.getSymbol());
-            mapper.updateEntityFromDto(newStock, stock);
+        if (company.getLastFetched() != null && company.getLastFetched().isAfter(isOld)) {
+            Stock latest = stockRepo.findLatestByCompanyId(companyId);
+            return buildDto(company, latest);
         }
+
+        Stock latest = stockRepo.findLatestByCompanyId(companyId);
+
+        if (latest != null && latest.getLastFetched().isAfter(isOld)) {
+            company.setLastFetched(latest.getLastFetched());
+            return buildDto(company, latest);
+        }
+
+        StockGetDto stockDto;
+        try {
+            stockDto = stockApiClient.getBySymbol(company.getSymbol());
+        } catch (Exception e) {
+            throw new StockApiFetchException("Failed to fetch stock for company " + company.getName());
+        }
+
+        Stock newStock = new Stock();
+        mapper.updateEntityFromDto(stockDto, newStock);
+        newStock.setLastFetched(Instant.now());
+        newStock.setCompany(company);
 
         try {
-            repo.create(stock);
-        } catch (ConstraintViolationException e) {
-            throw new PersistenceException("Database validation failed");
+            stockRepo.create(newStock);
+        } catch (Exception e) {
+            throw new PersistenceException("Failed to save stock for company " + company.getName());
         }
 
-        company.setCompanyStock(stock);
+        company.addStock(newStock);
+        company.setLastFetched(newStock.getLastFetched());
 
-        try {
-            repo.synchronize();
-        } catch (ConstraintViolationException e) {
-            throw new PersistenceException("Database validation failed");
-        }
-
-        CompanyGetStocksDto companyGetStocksDto = new CompanyGetStocksDto();
-        mapper.createGetCompanyStockResult(company, companyGetStocksDto);
-        return companyGetStocksDto;
+        return buildDto(company, newStock);
     }
 
+    private CompanyGetStocksDto buildDto(Company company, Stock stock) {
+        CompanyGetStocksDto dto = new CompanyGetStocksDto();
+        mapper.createGetCompanyStockResult(company, stock, dto);
+        return dto;
+    }
 }

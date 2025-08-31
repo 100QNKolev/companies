@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 public class CompanyCreateDto
 {
     @NotBlank
+    @Size(max = 255)
     private String name;
 
     @NotBlank
@@ -14,11 +15,14 @@ public class CompanyCreateDto
     private String country;
 
     @NotBlank
+    @Size(max = 10)
     private String symbol;
 
     @Email
+    @Size(max = 255)
     private String email;
 
+    @Size(max = 255)
     private String website;
 
     public CompanyCreateDto() {}

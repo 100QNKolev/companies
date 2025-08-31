@@ -20,7 +20,7 @@ public class Company {
     @Column(nullable = false, length = 2)
     private String country;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 10)
     private String symbol;
 
     @CreationTimestamp

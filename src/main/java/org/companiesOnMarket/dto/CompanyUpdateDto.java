@@ -5,17 +5,21 @@ import jakarta.validation.constraints.Size;
 
 public class CompanyUpdateDto
 {
-
+    @Size(max = 255)
     private String name;
 
     @Size(min = 2, max = 2)
     private String country;
+
     //Maybe add unique
+    @Size(max = 10)
     private String symbol;
 
     @Email
+    @Size(max = 255)
     private String email;
 
+    @Size(max = 255)
     private String website;
 
     public CompanyUpdateDto() {}

@@ -1,6 +1,7 @@
 plugins {
     java
     id("io.quarkus")
+    id("org.sonarqube") version "6.3.1.5724"
 }
 
 repositories {
@@ -29,6 +30,15 @@ dependencies {
     // MapStruct
     implementation("org.mapstruct:mapstruct:1.6.2")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
+}
+
+sonarqube {
+    properties {
+        property("sonar.projectKey", "100QNKolev_companies")
+        property("sonar.organization", "100qnkolev")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.java.binaries", "build/classes/java/main")
+    }
 }
 
 group = "org.companiesOnMarket"

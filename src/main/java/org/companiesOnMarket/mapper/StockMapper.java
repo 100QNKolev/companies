@@ -12,8 +12,8 @@ public interface StockMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateEntityFromDto(StockGetDto dto, @MappingTarget Stock entity);
 
-    @Mapping(source = "companyStock.marketCapitalization", target = "marketCapitalization")
-    @Mapping(source = "companyStock.shareOutstanding", target = "shareOutstanding")
+    @Mapping(source = "stock.marketCapitalization", target = "marketCapitalization")
+    @Mapping(source = "stock.shareOutstanding", target = "shareOutstanding")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void createGetCompanyStockResult(Company entity, @MappingTarget CompanyGetStocksDto dto);
+    void createGetCompanyStockResult(Company entity, Stock stock, @MappingTarget CompanyGetStocksDto dto);
 }

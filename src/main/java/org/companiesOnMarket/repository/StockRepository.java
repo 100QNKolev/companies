@@ -13,5 +13,13 @@ public class StockRepository {
 
     public void create(Stock stock) { em.persist(stock); }
 
-    public void synchronize() { em.flush(); }
+    public Stock findLatestByCompanyId(Long companyId) {
+        return em.createQuery(
+                "SELECT s FROM Stock s WHERE s.company.id = :companyId ORDER BY s.lastFetched DESC", Stock.class)
+                .setParameter("companyId", companyId)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
 }

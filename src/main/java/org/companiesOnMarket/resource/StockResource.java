@@ -15,5 +15,5 @@ public class StockResource {
 
     @GET
     @Path("/{id}")
-    public CompanyGetStocksDto getCompanyStocks(@PathParam("id") long id) { return stockService.getOrCreateStockById(id); }
+    public CompanyGetStocksDto getCompanyStocks(@PathParam("id") long id) { return stockService.getOrUpdateStock(id); }
 }

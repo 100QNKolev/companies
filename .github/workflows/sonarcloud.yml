@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,7 +27,7 @@ jobs:
       - name: Build project
         run: ./gradlew build --no-daemon
 
-      - name: Run SonarCloud analysis
-        run: ./gradlew sonar
+      - name: SonarCloud Scan
+        run: ./gradlew sonar --no-daemon -Dsonar.token=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

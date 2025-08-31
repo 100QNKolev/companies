@@ -5,13 +5,20 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.companiesOnMarket.entity.Company;
+import org.companiesOnMarket.service.StockService;
+
 import java.util.List;
 
 @ApplicationScoped
 public class CompanyRepository {
 
-    @Inject
     EntityManager em;
+
+    @Inject
+    public CompanyRepository(EntityManager em)
+    {
+        this.em = em;
+    }
 
     public void create(Company company) { em.persist(company); }
 

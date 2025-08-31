@@ -21,18 +21,22 @@ import java.time.temporal.ChronoUnit;
 @ApplicationScoped
 public class StockService {
 
-    @Inject
-    @RestClient
-    StockApiClient stockApiClient;
+    private final StockApiClient stockApiClient;
+    private final CompanyService companyService;
+    private final StockRepository stockRepo;
+    private final StockMapper mapper;
 
     @Inject
-    CompanyService companyService;
-
-    @Inject
-    StockRepository stockRepo;
-
-    @Inject
-    StockMapper mapper;
+    public StockService(
+            @RestClient StockApiClient stockApiClient,
+            CompanyService companyService,
+            StockRepository stockRepo,
+            StockMapper mapper) {
+        this.stockApiClient = stockApiClient;
+        this.companyService = companyService;
+        this.stockRepo = stockRepo;
+        this.mapper = mapper;
+    }
 
     @Transactional
     public CompanyGetStocksDto getOrUpdateStock(long companyId) {
@@ -67,7 +71,6 @@ public class StockService {
         Stock newStock = new Stock();
         mapper.updateEntityFromDto(stockDto, newStock);
         newStock.setLastFetched(Instant.now());
-        newStock.setCompany(company);
 
         try {
             stockRepo.create(newStock);

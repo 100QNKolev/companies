@@ -2,6 +2,7 @@ plugins {
     java
     id("io.quarkus")
     id("org.sonarqube") version "6.3.1.5724"
+    id("jacoco")
 }
 
 repositories {
@@ -36,6 +37,18 @@ version = "1.0-SNAPSHOT"
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = JavaVersion.VERSION_21
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+    reportsDirectory = layout.buildDirectory.dir("customJacocoReportDir")
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
+}
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
 tasks.withType<Test> {

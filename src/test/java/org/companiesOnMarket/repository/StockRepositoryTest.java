@@ -6,7 +6,6 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import org.companiesOnMarket.entity.Company;
 import org.companiesOnMarket.entity.Stock;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -17,14 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class StockRepositoryTest {
 
-    public final StockRepository stockRepo;
-    public final EntityManager em;
+    @Inject
+    StockRepository stockRepo;
 
-    public StockRepositoryTest(StockRepository stockRepo, EntityManager em)
-    {
-        this.stockRepo = stockRepo;
-        this.em = em;
-    }
+    @Inject
+    EntityManager em;
 
     @Test
     @TestTransaction

@@ -1,6 +1,5 @@
 package org.companiesOnMarket.service;
 
-import io.quarkus.test.InjectMock;
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import org.companiesOnMarket.dto.CompanyCreateDto;

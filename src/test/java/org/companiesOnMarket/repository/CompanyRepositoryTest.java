@@ -2,8 +2,8 @@ package org.companiesOnMarket.repository;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import org.companiesOnMarket.entity.Company;
 import org.junit.jupiter.api.Test;
 
@@ -15,14 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTest
 class CompanyRepositoryTest {
 
-    public final CompanyRepository companyRepo;
-    public final EntityManager em;
+    @Inject
+    CompanyRepository companyRepo;
 
-    public CompanyRepositoryTest(CompanyRepository companyRepo, EntityManager em)
-    {
-        this.companyRepo = companyRepo;
-        this.em = em;
-    }
+    @Inject
+    EntityManager em;
 
     @Test
     @TestTransaction

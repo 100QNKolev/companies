@@ -53,6 +53,6 @@ public class Stock {
     public Instant getLastFetched() { return lastFetched; }
     public void setLastFetched(Instant lastFetched) { this.lastFetched = lastFetched; }
 
-    protected void setCompanyId(Long companyId) { this.companyId = companyId; }
+    public void setCompanyId(Long companyId) { this.companyId = companyId; }
     public Long getCompanyId() { return companyId; }
 }

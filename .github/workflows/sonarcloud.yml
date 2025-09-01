@@ -9,6 +9,25 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      QUARKUS_DATASOURCE_JDBC_URL: jdbc:postgresql://localhost:5432/testdb
+      QUARKUS_DATASOURCE_USERNAME: user
+      QUARKUS_DATASOURCE_PASSWORD: password
 
     steps:
       - uses: actions/checkout@v3
@@ -25,9 +44,12 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build project
-        run: ./gradlew build --no-daemon
+        run: ./gradlew build -Dquarkus-profile=test --no-daemon
+
+      - name: Run tests with coverage
+        run: ./gradlew clean test jacocoTestReport
 
       - name: SonarCloud Scan
-        run: ./gradlew sonar --no-daemon -Dsonar.token=$SONAR_TOKEN
+        run: ./gradlew sonar --no-daemon -Dsonar.testExecutionReportPaths=build/test-results/test -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml -Dsonar.token=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

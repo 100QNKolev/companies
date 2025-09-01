@@ -3,22 +3,22 @@ package org.companiesOnMarket.dto;
 import java.math.BigDecimal;
 
 public class StockGetDto {
-    private Long marketCapitalization;
+    private BigDecimal marketCapitalization;
 
     private BigDecimal shareOutstanding;
 
     public StockGetDto() {}
 
-    public StockGetDto(Long marketCapitalization, BigDecimal shareOutstanding)
+    public StockGetDto(BigDecimal marketCapitalization, BigDecimal shareOutstanding)
     {
         this.marketCapitalization = marketCapitalization;
         this.shareOutstanding = shareOutstanding;
     }
 
-    public Long getMarketCapitalization() {
+    public BigDecimal getMarketCapitalization() {
         return marketCapitalization;
     }
-    public void setMarketCapitalization(Long marketCapitalization) {
+    public void setMarketCapitalization(BigDecimal marketCapitalization) {
         this.marketCapitalization = marketCapitalization;
     }
 

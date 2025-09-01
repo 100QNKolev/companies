@@ -13,13 +13,13 @@ public class CompanyGetStocksDto {
 
     private String website;
 
-    private Long marketCapitalization;
+    private BigDecimal marketCapitalization;
 
     private BigDecimal shareOutstanding;
 
     public CompanyGetStocksDto() {}
 
-    public CompanyGetStocksDto(String name, String country, String symbol, String website, String email, Long marketCapitalization, BigDecimal shareOutstanding)
+    public CompanyGetStocksDto(String name, String country, String symbol, String website, String email, BigDecimal marketCapitalization, BigDecimal shareOutstanding)
     {
         this.name = name;
         this.country = country;
@@ -64,10 +64,10 @@ public class CompanyGetStocksDto {
         this.email = email;
     }
 
-    public Long getMarketCapitalization() {
+    public BigDecimal getMarketCapitalization() {
         return marketCapitalization;
     }
-    public void setMarketCapitalization(Long marketCapitalization) {
+    public void setMarketCapitalization(BigDecimal marketCapitalization) {
         this.marketCapitalization = marketCapitalization;
     }
 

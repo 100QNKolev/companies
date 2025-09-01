@@ -44,7 +44,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build project
-        run: ./gradlew test -Dquarkus-profile=test --no-daemon
+        run: ./gradlew build -Dquarkus-profile=test --no-daemon
 
       - name: SonarCloud Scan
         run: ./gradlew sonar --no-daemon -Dsonar.token=$SONAR_TOKEN

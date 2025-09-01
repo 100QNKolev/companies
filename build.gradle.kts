@@ -29,6 +29,8 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:$mapstructVersion")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
+    testImplementation("org.mockito:mockito-core:5.+")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.+")
 }
 
 group = "org.companiesOnMarket"

@@ -47,6 +47,6 @@ jobs:
         run: ./gradlew build -Dquarkus-profile=test --no-daemon
 
       - name: SonarCloud Scan
-        run: ./gradlew sonar --no-daemon -Dsonar.token=$SONAR_TOKEN
+        run: ./gradlew sonar --no-daemon -Dsonar.junit.reportPaths=build/test-results/test -Dsonar.coverage.jacoco.xmlReportPaths=build/customJacocoReportDir/test/jacocoTestReport.xml -Dsonar.token=$SONAR_TOKEN
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
